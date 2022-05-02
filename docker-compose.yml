@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   web:
-    build: .
+    build: ./app
     env_file: database.conf
     ports:
       - "5000:5000"
