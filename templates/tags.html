@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .tag {
+          border-width: 2px;
+          border-style: inset;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href="/">
+        <h1>Home</h1>
+    </a>
+
+    {%for tag in tags%}
+        <div class="tag">
+            <form action="/tag/{{tag.id}}" method="post">
+                <input type="text" placeholder="Enter Name" name="name" value="{{ tag.name }}">
+                <input type="submit" value="Update">
+            </form>
+            <form action="/deleteTag/{{tag.id}}" method="post" id="noteform">
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+        <br>
+    {%endfor%}
+
+    <form action="/createTag" method="post">
+        <input type="text" placeholder="Enter Name" name="name">
+        <input type="submit" value="+ Create a New Tag">
+    </form>
+
+</body>
+</html>

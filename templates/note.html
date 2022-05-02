@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href="/">
+        <h1>Home</h1>
+    </a>
+
+    <form action="/note/{{note.id}}" method="post" id="noteform">
+        <label>{{ note.last_modified }}</label><br>
+        <input type="text" placeholder="Enter Name" name="name" value="{{ note.name }}"><br>
+        <textarea name="content" form="noteform" placeholder="Enter Note Content Here or Create Note" rows="50">{{ note.content }}</textarea><br>
+        <input type="submit" value="Update Note">
+    </form><br><br>
+
+    {%for tag in note.tags%}
+        <div class="note" id="note{{note.id}}">
+            <a href="/note/{{note.id}}/deleteTag/{{tag.id}}" class="a">
+                {{tag.name}}
+            </a>
+        </div>
+    {%endfor%}
+    <form action="/note/{{note.id}}/addTag" method="post">
+        <p><select size="10" multiple name="tag_id">
+            {%for tag in tags%}
+                <option value={{ tag.id }}>{{ tag.name }}</option>
+            {%endfor%}
+        </select></p>
+        <p><input type="submit" value="add Tag"></p>
+    </form>
+
+</body>
+</html>

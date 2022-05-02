@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+    .note {
+      border-width: 2px;
+      border-style: inset;
+    }
+    .tag {
+      border-width: 2px;
+      border-style: inset;
+    }
+    </style>
+    <meta charset="UTF-8">
+    <title>main</title>
+</head>
+<body>
+    <a href="/tags">
+        <h1>Tags</h1>
+    </a>
+    <h1>Notes</h1><br>
+    <form action="/setSearchText/" method="post">
+        <input type="text" placeholder="Enter Text" name="text" value="{{ search_text }}">
+        <p><input type="submit" value="search"></p>
+    </form><br>
+    {%for tag in search_tag%}
+        <a href="/deleteSearchTag/{{tag.id}}">{{tag.name}};   </a>
+    {%endfor%}
+    <form action="/addSearchTag/" method="post">
+        <p><select size="10" multiple name="tag_id">
+            {%for tag in tags%}
+                <option value={{ tag.id }}>{{ tag.name }}</option>
+            {%endfor%}
+        </select></p>
+        <p><input type="submit" value="add Tag"></p>
+    </form><br>
+
+    <form action="/setSortParams/" method="post">
+       <div>
+          <input type="checkbox" id="sort_by_name" name="sort_by_name" {% if sort_by_name == True %} checked{% endif %}>
+          <label for="sort_by_name">sort_by_name</label>
+       </div>
+       <div>
+          <input type="checkbox" id="sort_by_time" name="sort_by_time" {% if sort_by_time == True %} checked{% endif %}>
+          <label for="sort_by_time">sort_by_time</label>
+       </div>
+        <p><input type="submit" value="update"></p>
+    </form><br>
+
+    {%for note in notes%}
+        <div class="note" id="note{{note.id}}">
+            <label>{{note.last_modified}}</label><br>
+            {%for tag in note.tags%}
+            {{ tag.name }};
+            {%endfor%}
+            <a href="/note/{{note.id}}" class="a">
+                <h2>{{note.name}}</h2>
+            </a>
+            {{ note.content }}<br><br><br>
+            <a href="/deleteNote/{{note.id}}">Delete {{note.name}}</a><br>
+        </div>
+        <br>
+    {%endfor%}
+
+<br><br><a href="/createNote" class="buttonlike"><h3>+ Create a New Note</h3></a><br><br>
+
+</body>
+</html>
