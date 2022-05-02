@@ -43,31 +43,18 @@ def home():
     if 'search_text' not in session:
         session['search_text'] = ""
     session.update()
+    order = []
     if session['sort_by_name']:
-        if session['sort_by_time']:
-            all_note = db.session.query(Notes). \
-                filter((Notes.tags.any(Tags.id.in_(session['search_tag'])) if len(session['search_tag']) else True)). \
-                filter(Notes.content.like(f"%{session['search_text']}%")). \
-                order_by((Notes.name), (Notes.last_modified.desc())). \
-                all()
-        else:
-            all_note = db.session.query(Notes). \
-                filter((Notes.tags.any(Tags.id.in_(session['search_tag'])) if len(session['search_tag']) else True)). \
-                filter(Notes.content.like(f"%{session['search_text']}%")). \
-                order_by(Notes.name). \
-                all()
-    else:
-        if session['sort_by_time']:
-            all_note = db.session.query(Notes). \
-                filter((Notes.tags.any(Tags.id.in_(session['search_tag'])) if len(session['search_tag']) else True)). \
-                filter(Notes.content.like(f"%{session['search_text']}%")). \
-                order_by(Notes.last_modified.desc()). \
-                all()
-        else:
-            all_note = db.session.query(Notes). \
-                filter((Notes.tags.any(Tags.id.in_(session['search_tag'])) if len(session['search_tag']) else True)). \
-                filter(Notes.content.like(f"%{session['search_text']}%")). \
-                all()
+        order.append(Notes.name)
+    if session['sort_by_time']:
+        order.append(Notes.last_modified.desc())
+
+    all_note = db.session.query(Notes). \
+        filter((Notes.tags.any(Tags.id.in_(session['search_tag'])) if len(session['search_tag']) else True)). \
+        filter(Notes.content.like(f"%{session['search_text']}%")). \
+        order_by(*order). \
+        all()
+
     return render_template("main.html", notes=all_note, tags=Tags.query.all(),
                            search_tag=db.session.query(Tags).filter(Tags.id.in_(session['search_tag'])).all(),
                            search_text=session['search_text'],
